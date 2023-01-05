@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <title>Trader Kontrol Panel</title>
+        <meta charst="en">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+        <!-- This is used to load the modules that I made and will be using. -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <script type="text/javascript">
+            var ip = '{{ data.host.IP }}';
+            var port = '{{ data.host.Port }}';
+        </script>
+        
+    </head>
+    <body>
+        {% from 'jinja_templates.html' import overview_data_panel %}
+        {% from 'jinja_templates.html' import market_data_panel %}
+
+        <div class="sidebar">
+            <h2>Trader Bot</h2>
+            <ul>
+                <li><a href=# onclick="hide_section(event, 'Overview');">Genel Bakış</a></li>
+            {% for market_symbol in data.market_symbols %}
+                <li><a href=# onclick="hide_section(event, '{{ market_symbol }}');">{{ market_symbol }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+        <main>
+            {{ overview_data_panel(data.market_symbols) }}
+            {% for market_symbol in data.market_symbols %}
+                {{ market_data_panel(market_symbol) }}
+            {% endfor %}
+        </main>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<div class="tradingview-widget-container">
+    <div id="tradingview_53cb5"></div>
+    <div class="tradingview-widget-copyright">TradingView'den <a href="https://tr.tradingview.com/symbols/FRONTUSDT/?exchange=BINANCE" rel="noopener" target="_blank"><span class="blue-text">FRONTUSDT Grafiği</span></a></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript">
+    new TradingView.widget(
+    {
+    "width": 700,
+    "height": 980,
+    "symbol": "BINANCE:FRONTUSDT",
+    "interval": "240",
+    "timezone": "Etc/UTC",
+    "theme": "dark",
+    "style": "1",
+    "locale": "tr",
+    "toolbar_bg": "#f1f3f6",
+    "enable_publishing": false,
+    "allow_symbol_change": true,
+    "save_image": false,
+    "studies": [
+      "MACD@tv-basicstudies"
+    ],
+    "container_id": "tradingview_53cb5"
+  }
+    );
+    </script>
+  </div>
+    </body>
+</html>
