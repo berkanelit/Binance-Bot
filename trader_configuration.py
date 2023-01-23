@@ -14,16 +14,16 @@ def technical_indicators(candles):
     low_prices      = [candle[3] for candle in candles]
     close_prices    = [candle[4] for candle in candles]
 
-    indicators.update({'macd':TI.get_MACD(close_prices, time_values=time_values, map_time=True)})
+    # indicators.update({'macd':TI.get_MACD(close_prices, time_values=time_values, map_time=True)})
 
-    indicators.update({'ema':{}})
-    indicators['ema'].update({'ema200':TI.get_EMA(close_prices, 200, time_values=time_values, map_time=True)})
+    # indicators.update({'ema':{}})
+    # indicators['ema'].update({'ema200':TI.get_EMA(close_prices, 200, time_values=time_values, map_time=True)})
 
-    indicators.update({'sma':{}})
-    indicators['sma'].update({'sma':TI.get_SMA(close_prices, 200, time_values=time_values, map_time=True)})
+    # indicators.update({'sma':{}})
+    # indicators['sma'].update({'sma':TI.get_SMA(close_prices, 200, time_values=time_values, map_time=True)})
 
-    indicators.update({'mfi':{}})
-    indicators['mfi'].update({'mfi':TI.get_MFI(close_prices, 200, time_values=time_values, map_time=True)})
+    # indicators.update({'mfi':{}})
+    # indicators['mfi'].update({'mfi':TI.get_MFI(close_prices, 200, time_values=time_values, map_time=True)})
 
     return(indicators)
 

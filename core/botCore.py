@@ -10,6 +10,7 @@ import threading
 from decimal import Decimal
 from flask_socketio import SocketIO
 from flask import Flask, render_template, url_for, request
+from numpy import *
 
 from binance_api import api_master_rest_caller
 from binance_api import api_master_socket_caller
@@ -278,20 +279,23 @@ class BotCore():
 
             if (self.market_type == 'MARGIN' and market['isMarginTradingAllowed'] == False) or (self.market_type == 'SPOT' and market['isSpotTradingAllowed'] == False):
                 not_supported.append(fmtMarket)
-                continue
-
+                continue   
+            for item in market:  
+                for item2 in market['filters']:             
+                     print(item2)        
+            # print(market)
             # Minimum miktarı ayarlamak için kullanılır.
-            if float(market['filters'][2]['minQty']) < 1.0:
-                minQuantBase = (Decimal(market['filters'][2]['minQty'])).as_tuple()
+            if float(market['filters'][1]['minQty']) < 1.0:
+                minQuantBase = (Decimal(market['filters'][1]['minQty'])).as_tuple()
                 lS = abs(int(len(minQuantBase.digits)+minQuantBase.exponent))+1
             else: lS = 0
-
+            
             # Bu, piyasa için fiyat hassasiyetini ayarlamak için kullanılır.
             tickSizeBase = (Decimal(market['filters'][0]['tickSize'])).as_tuple()
             tS = abs(int(len(tickSizeBase.digits)+tickSizeBase.exponent))+1
 
             # Bu, piyasaların minimum gösterimini elde etmek için kullanılır.
-            mN = float(market['filters'][3]['minNotional'])
+            mN = float(market['filters'][2]['minNotional'])
 
             # Tüm kuralları tüccara iletmek için bir json nesnesine koyun.
             market_rules = {'LOT_SIZE':lS, 'TICK_SIZE':tS, 'MINIMUM_NOTATION':mN}
