@@ -28,7 +28,7 @@ import numpy as np
 
 
 ## This function is used to calculate and return the Bollinger Band indicator.
-def get_BOLL(prices, time_values=None, ma_type=21, stDev=2, map_time=True):
+def get_BOLL(prices, time_values=None, ma_type=21, stDev=2, map_time=False):
     """
     This function uses 2 parameters to calculate the BB-
     
@@ -65,7 +65,7 @@ def get_BOLL(prices, time_values=None, ma_type=21, stDev=2, map_time=True):
 
 
 ## This function is used to calculate and return the RSI indicator.
-def get_RSI(prices, time_values=None, rsiType=14, map_time=True):
+def get_RSI(prices, time_values=None, rsiType=14, map_time=False):
     """ 
     This function uses 2 parameters to calculate the RSI-
     
@@ -196,7 +196,7 @@ def get_S_O(priceClose, priceHigh, priceLow, time_values=None, period=14, K=3, D
 
 
 ## This function is used to calculate and return SMA.
-def get_SMA(prices, maPeriod, time_values=None, prec=8, map_time=True, result_format='normal'):
+def get_SMA(prices, maPeriod, time_values=None, prec=8, map_time=False, result_format='normal'):
     """
     This function uses 3 parameters to calculate the Simple Moving Average-
     
@@ -309,7 +309,7 @@ def get_RMA(prices, maPeriod, time_values=None, prec=8, map_time=False, result_f
 
 
 ## This function is used to calculate and return the the MACD indicator.
-def get_MACD(prices, time_values=None, Efast=12, Eslow=26, signal=9, map_time=True):
+def get_MACD(prices, time_values=None, Efast=12, Eslow=26, signal=9, map_time=False):
     """
     This function uses 5 parameters to calculate the Moving Average Convergence/Divergence-
     
