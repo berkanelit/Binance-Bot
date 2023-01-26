@@ -10,7 +10,6 @@ import threading
 from decimal import Decimal
 from flask_socketio import SocketIO
 from flask import Flask, render_template, url_for, request
-from numpy import *
 
 from binance_api import api_master_rest_caller
 from binance_api import api_master_socket_caller
@@ -280,10 +279,7 @@ class BotCore():
             if (self.market_type == 'MARGIN' and market['isMarginTradingAllowed'] == False) or (self.market_type == 'SPOT' and market['isSpotTradingAllowed'] == False):
                 not_supported.append(fmtMarket)
                 continue   
-            for item in market:  
-                for item2 in market['filters']:             
-                     print(item2)        
-            # print(market)
+
             # Minimum miktarı ayarlamak için kullanılır.
             if float(market['filters'][1]['minQty']) < 1.0:
                 minQuantBase = (Decimal(market['filters'][1]['minQty'])).as_tuple()
