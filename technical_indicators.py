@@ -309,7 +309,7 @@ def get_RMA(prices, maPeriod, time_values=None, prec=8, map_time=False, result_f
 
 
 ## This function is used to calculate and return the the MACD indicator.
-def get_MACD(prices, time_values=None, Efast=12, Eslow=26, signal=9, map_time=False):
+def get_MACD(prices, time_values=None, Efast=12, Eslow=26, signal=12, map_time=False):
     """
     This function uses 5 parameters to calculate the Moving Average Convergence/Divergence-
     

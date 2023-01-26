@@ -17,8 +17,8 @@ def technical_indicators(candles):
     indicators.update({'macd':TI.get_MACD(close_prices, time_values=time_values, map_time=True)})
 
     indicators.update({'ema':{}})
-    indicators['ema'].update({'ema200':TI.get_EMA(close_prices, 200, time_values=time_values, map_time=True)})
-
+    indicators['ema'].update({'ema40':TI.get_EMA(close_prices, 40, time_values=time_values, map_time=True)})
+    
     # indicators.update({'sma':{}})
     # indicators['sma'].update({'sma':TI.get_SMA(close_prices, 200, time_values=time_values, map_time=True)})
 
@@ -110,9 +110,9 @@ def long_entry_conditions(custom_conditional_data, trade_information, indicators
     order_point = 0
     signal_id = 0
     macd = indicators['macd']
-    ema200 = indicators['ema']['ema200']
+    ema40 = indicators['ema']['ema40']
 
-    if (candles[0][4] > ema200[0]):
+    if (candles[0][4] > ema40[0]):
         if macd[0]['macd'] > macd[1]['macd']:
             order_point += 1
             if macd[1]['hist'] > macd[0]['hist']:
