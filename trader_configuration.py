@@ -176,3 +176,4 @@ def basic_stoploss_setup(trade_information, price, stop_price, position_type):
         'stopPrice':stop_price,
         'description':'{0} exit stop-loss'.format(position_type), 
         'order_type':'STOP_LOSS_LIMIT'})
+    
