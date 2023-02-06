@@ -15,10 +15,6 @@ from binance_api import api_master_rest_caller
 from binance_api import api_master_socket_caller
 
 from . import trader
-import multiprocessing
-
-print("Number of cpu : ", multiprocessing.cpu_count())
-
 
 MULTI_DEPTH_INDICATORS = ['ema', 'sma', 'rma', 'order']
 

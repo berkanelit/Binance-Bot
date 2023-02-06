@@ -2,7 +2,7 @@ import logging
 import numpy as np
 import technical_indicators as TI
 
-## Minimum fiyat yuvarlama.
+## Minimum price rounding.
 pRounding = 8
 
 def technical_indicators(candles):
@@ -18,7 +18,7 @@ def technical_indicators(candles):
 
     indicators.update({'ema':{}})
     indicators['ema'].update({'ema40':TI.get_EMA(close_prices, 40, time_values=time_values, map_time=True)})
- 
+
     return(indicators)
 
 '''
@@ -66,18 +66,19 @@ def technical_indicators(candles):
 
 
 def other_conditions(custom_conditional_data, trade_information, previous_trades, position_type, candles, indicators, symbol):
-    # Varsayılanları tanımlayın.
+    # Define defaults.
     can_order = True
 
-    # Ticaret için ek ekstra koşullar ayarlayın.
+    # Setup additional extra conditions for trading.
     if trade_information['market_status'] == 'COMPLETE_TRADE':
         trade_information['market_status'] = 'TRADING'
 
     trade_information.update({'can_order':can_order})
     return(custom_conditional_data, trade_information)
 
+
 def long_exit_conditions(custom_conditional_data, trade_information, indicators, prices, candles, symbol):
-    # Uzun çıkış (sat) koşullarını bu bölümün altına yerleştirin.
+    # Place Long exit (sell) conditions under this section.
     order_point = 0
     signal_id = 0
     macd = indicators['macd']
@@ -91,16 +92,29 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
 
     stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.004)), pRounding))
     stop_loss_status = basic_stoploss_setup(trade_information, stop_loss_price, stop_loss_price, 'LONG')
+    
+    limit_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.01)), pRounding))
+    limit_loss_status = limit_sell(trade_information, limit_loss_price, 'LONG')
 
-    # Bekleme ve sipariş pozisyonlarının güncellenmesi için taban getiri.
-    if stop_loss_status:
+    # Base return for waiting and updating order positions.
+    def stoploss():
+     if stop_loss_status:
         return(stop_loss_status)
-    else:
+     else:
         return({'order_point':'L_ext_{0}_{1}'.format(signal_id, order_point)})
+    
+    def limit():
+        if limit_loss_status:
+         return(limit_loss_status)
+        else:
+         return({'order_point':'L_ext_{0}_{1}'.format(signal_id, order_point)})
+     
+    stoploss()
+    limit()
 
 
 def long_entry_conditions(custom_conditional_data, trade_information, indicators, prices, candles, symbol):
-    # Uzun giriş (satın alma) koşullarını bu bölümün altına yerleştirin.
+    # Place Long entry (buy) conditions under this section.
     order_point = 0
     signal_id = 0
     macd = indicators['macd']
@@ -114,7 +128,7 @@ def long_entry_conditions(custom_conditional_data, trade_information, indicators
                     'description':'LONG entry signal 1', 
                     'order_type':'MARKET'})
 
-    # Bekleme ve sipariş pozisyonlarının güncellenmesi için taban getiri.
+    # Base return for waiting and updating order positions.
     if order_point == 0:
         return({'order_type':'WAIT'})
     else:
@@ -122,7 +136,7 @@ def long_entry_conditions(custom_conditional_data, trade_information, indicators
 
 
 def short_exit_conditions(custom_conditional_data, trade_information, indicators, prices, candles, symbol):
-    ## Bu bölümün altına Kısa çıkış (sat) koşullarını yerleştirin.
+    ## Place Short exit (sell) conditions under this section.
     order_point = 0
     signal_id = 0
     macd = indicators['macd']
@@ -137,7 +151,7 @@ def short_exit_conditions(custom_conditional_data, trade_information, indicators
     stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.004)), pRounding))
     stop_loss_status = basic_stoploss_setup(trade_information, stop_loss_price, stop_loss_price, 'SHORT')
 
-    # Bekleme ve sipariş pozisyonlarının güncellenmesi için taban getiri.
+    # Base return for waiting and updating order positions.
     if stop_loss_status:
         return(stop_loss_status)
     else:
@@ -145,13 +159,13 @@ def short_exit_conditions(custom_conditional_data, trade_information, indicators
 
 
 def short_entry_conditions(custom_conditional_data, trade_information, indicators, prices, candles, symbol):
-    ## Bu bölümün altına Kısa giriş (satın alma) koşullarını yerleştirin.
+    ## Place Short entry (buy) conditions under this section.
     order_point = 0
     signal_id = 0
     macd = indicators['macd']
-    ema200 = indicators['ema']['ema200']
+    ema40 = indicators['ema']['ema40']
 
-    if (candles[0][4] < ema200[0]):
+    if (candles[0][4] < ema40[0]):
         if macd[0]['macd'] < macd[1]['macd'] and macd[0]['hist'] > macd[0]['macd']:
             order_point += 1
             if macd[1]['hist'] < macd[0]['hist']:
@@ -159,7 +173,7 @@ def short_entry_conditions(custom_conditional_data, trade_information, indicator
                     'description':'SHORT entry signal 1', 
                     'order_type':'MARKET'})
 
-    # Bekleme ve sipariş pozisyonlarının güncellenmesi için taban getiri.
+    # Base return for waiting and updating order positions.
     if order_point == 0:
         return({'order_type':'WAIT'})
     else:
@@ -167,7 +181,7 @@ def short_entry_conditions(custom_conditional_data, trade_information, indicator
 
 
 def basic_stoploss_setup(trade_information, price, stop_price, position_type):
-    # Temel stop-loss kurulumu.
+    # Basic stop-loss setup.
     if trade_information['order_type'] == 'STOP_LOSS_LIMIT':
         return
 
@@ -176,4 +190,14 @@ def basic_stoploss_setup(trade_information, price, stop_price, position_type):
         'stopPrice':stop_price,
         'description':'{0} exit stop-loss'.format(position_type), 
         'order_type':'STOP_LOSS_LIMIT'})
+    
+def limit_sell(trade_information, price, position_type):
+    
+    if trade_information['order_type'] == 'MARKET':
+        return
+    
+    return({'side':'SELL', 
+        'price':price,
+        'description':'{0} Limit Sell'.format(position_type), 
+        'order_type':'MARKET'})
     

@@ -357,6 +357,7 @@ def get_DEMA(prices, maPeriod, prec=8):
     return DEMA.round(prec)
 
 
+
 ## This function is used to calculate and return the the MACD indicator.
 def get_zeroLagMACD(prices, time_values=None, Efast=12, Eslow=26, signal=9, map_time=False):
     """
