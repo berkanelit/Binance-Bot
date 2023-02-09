@@ -90,10 +90,10 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
                 'description':'LONG exit signal 1', 
                 'order_type':'MARKET'})
 
-    stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.004)), pRounding))
+    stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.01)), pRounding))
     stop_loss_status = basic_stoploss_setup(trade_information, stop_loss_price, stop_loss_price, 'LONG')
     
-    limit_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.01)), pRounding))
+    limit_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.02)), pRounding))
     limit_loss_status = limit_sell(trade_information, limit_loss_price, 'LONG')
 
     # Base return for waiting and updating order positions.

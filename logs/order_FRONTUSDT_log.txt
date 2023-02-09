@@ -1,5 +1,0 @@
-BuyTime:2023-02-06 21:20:04, BuyPrice:0.23790000, BuyQuantity:4203.00000000, BuyType:LONG entry signal 1, SellTime:2023-02-06 21:37:04, SellPrice:0.23800000, SellQuantity:4203.00000000, SellType:LONG exit signal 1, Outcome:0.42030000
-BuyTime:2023-02-06 22:01:28, BuyPrice:0.23790000, BuyQuantity:4210.00000000, BuyType:LONG entry signal 1, SellTime:2023-02-06 22:26:04, SellPrice:0.23940000, SellQuantity:4210.00000000, SellType:LONG exit signal 1, Outcome:6.31500000
-BuyTime:2023-02-06 22:56:04, BuyPrice:0.23910000, BuyQuantity:4185.00000000, BuyType:LONG entry signal 1, SellTime:2023-02-06 23:14:47, SellPrice:0.23930000, SellQuantity:4185.00000000, SellType:LONG exit signal 1, Outcome:0.83700000
-BuyTime:2023-02-07 00:05:24, BuyPrice:0.23940000, BuyQuantity:4175.00000000, BuyType:LONG entry signal 1, SellTime:2023-02-07 00:22:05, SellPrice:0.23930000, SellQuantity:4175.00000000, SellType:LONG exit signal 1, Outcome:-0.41750000
-BuyTime:2023-02-07 00:39:05, BuyPrice:0.23980000, BuyQuantity:4170.00000000, BuyType:LONG entry signal 1, SellTime:2023-02-07 00:50:04, SellPrice:0.23840000, SellQuantity:4170.00000000, SellType:LONG exit signal 1, Outcome:-5.83800000

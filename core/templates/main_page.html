@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Trader Kontrol Panel</title>
+        <title>Trader Control Panel</title>
         <meta charst="en">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -23,9 +23,9 @@
         {% from 'jinja_templates.html' import market_data_panel %}
 
         <div class="sidebar">
-            <h2>Trader Bot</h2>
+            <h2>Binance Trader</h2>
             <ul>
-                <li><a href=# onclick="hide_section(event, 'Overview');">Genel Bakış</a></li>
+                <li><a href=# onclick="hide_section(event, 'Overview');">Overview</a></li>
             {% for market_symbol in data.market_symbols %}
                 <li><a href=# onclick="hide_section(event, '{{ market_symbol }}');">{{ market_symbol }}</a></li>
             {% endfor %}
@@ -39,5 +39,4 @@
         </main>
         <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     </body>
-    
 </html>
