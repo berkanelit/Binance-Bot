@@ -8,17 +8,17 @@ const double_depth_indicators = ['ema', 'sma', 'order', 'patterns_data_points', 
 window.Apex = {
     chart: {
         animations: {
-            enabled: false
+            enabled: true
         }
     },
-    autoScaleYaxis: false
+    autoScaleYaxis: true
 };
 
 // Chart template for main chart.
 var base_candle_chart_configuration = {
     series: [],
     chart: {
-        height: 800,
+        height: 600,
         id: 'main_Chart',
         type: 'line'
     },

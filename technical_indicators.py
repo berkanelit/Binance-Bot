@@ -345,8 +345,9 @@ def get_MACD(prices, time_values=None, Efast=12, Eslow=26, signal=12, map_time=F
 
     if map_time:
        macd = [ [ time_values[i], macd[i] ] for i in range(len(macd)) ]
-
+       
     return(macd)
+
 
 
 def get_DEMA(prices, maPeriod, prec=8):
