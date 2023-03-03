@@ -9,10 +9,15 @@ window.Apex = {
     chart: {
         animations: {
             enabled: true
-        }
+        },
+        update_chart: true
     },
-    autoScaleYaxis: true
+    autoScaleYaxis: true,
+    update_chart: true
 };
+
+var current_chart = '';
+var update_chart = true;
 
 // Chart template for main chart.
 var base_candle_chart_configuration = {

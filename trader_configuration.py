@@ -15,7 +15,7 @@ def technical_indicators(candles):
     close_prices    = [candle[4] for candle in candles]
 
     
-    indicators.update({'macd':TI.get_zeroLagMACD(close_prices, time_values=time_values, map_time=True)})
+    indicators.update({'macd':TI.get_MACD(close_prices, time_values=time_values, map_time=True)})
     
     indicators.update({'ema':{}})
     indicators['ema'].update({'ema40':TI.get_EMA(close_prices, 40, time_values=time_values, map_time=True)})
@@ -43,9 +43,10 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
     signal_id = 0
     macd = indicators['macd']
 
-    if macd[2]['macd'] < macd[3]['macd']:
+    if macd[0]['signal'] > macd[0]['macd']:
         order_point += 1
-        if macd[1]['hist'] < macd[0]['hist']:
+        print("Aha Satıyor Vallaha :O")
+        if macd[0]['hist'] < macd[1]['hist']:
             return({'side':'SELL',
                 'description':'LONG exit signal 1', 
                 'order_type':'MARKET'})
@@ -66,9 +67,10 @@ def long_entry_conditions(custom_conditional_data, trade_information, indicators
     macd = indicators['macd']
     ema40 = indicators['ema']['ema40']
 
-    if macd[3]['macd'] > macd[2]['macd']:
+    if macd[0]['signal'] < macd[0]['macd']:
         order_point += 1
-        if macd[1]['hist'] > macd[0]['hist']:
+        print("Aha Gördü Vallaha :D")
+        if macd[0]['hist'] > macd[1]['hist']:
             return({'side':'BUY',
                     'description':'LONG entry signal 1', 
                     'order_type':'MARKET'})

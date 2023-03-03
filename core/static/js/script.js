@@ -16,7 +16,7 @@ const class_data_mapping = {
 };
 
 var current_chart = '';
-var update_chart = false;
+var update_chart = true;
 
 
 $(document).ready(function() {
