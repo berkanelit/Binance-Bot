@@ -248,7 +248,7 @@ def get_MACD(prices, time_values=None, Efast=12, Eslow=26, signal=9, map_time=Fa
 def get_DEMA(prices, maPeriod, prec=8):
     EMA1 = get_EMA(prices, maPeriod)
     EMA2 = get_EMA(EMA1, maPeriod)
-    DEMA = np.subtract ((2 * EMA1[:len(EMA2)]), EMA2)
+    DEMA = np.subtract((2 * EMA1[:len(EMA2)]), EMA2)
 
     return DEMA.round(prec)
 
@@ -279,10 +279,10 @@ def get_zeroLagMACD(prices, time_values=None, Efast=12, Eslow=26, signal=9, map_
         'his':float
         }, ... ]
     """
-    z1 = get_EMA(prices, Efast)
-    z2 = get_EMA(prices, Eslow)
+    z1 = get_DEMA(prices, Efast)
+    z2 = get_DEMA(prices, Eslow)
     lineMACD = np.subtract (z1[:len(z2)], z2)
-    lineSIGNAL = get_EMA (lineMACD, signal)
+    lineSIGNAL = get_DEMA (lineMACD, signal)
     histogram = np.subtract(lineMACD[:len(lineSIGNAL)], lineSIGNAL)
 
     z_lag_macd = [({
