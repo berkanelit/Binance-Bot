@@ -2,7 +2,7 @@ import logging
 import numpy as np
 import technical_indicators as TI
 
-## Minimum price rounding.
+## Minimum fiyat yuvarlama.
 pRounding = 8
 
 def technical_indicators(candles):
@@ -15,7 +15,7 @@ def technical_indicators(candles):
     close_prices    = [candle[4] for candle in candles]
 
     
-    indicators.update({'macd':TI.get_MACD(close_prices, time_values=time_values, map_time=True)})
+    indicators.update({'macd':TI.get_zeroLagMACD(close_prices, time_values=time_values, map_time=True)})
     
     indicators.update({'ema':{}})
     indicators['ema'].update({'ema40':TI.get_EMA(close_prices, 40, time_values=time_values, map_time=True)})
@@ -26,10 +26,10 @@ def technical_indicators(candles):
 
 
 def other_conditions(custom_conditional_data, trade_information, previous_trades, position_type, candles, indicators, symbol):
-    # Define defaults.
+    # Varsayılanları tanımlayın.
     can_order = True
 
-    # Setup additional extra conditions for trading.
+    # Ticaret için ek ekstra koşullar ayarlayın.
     if trade_information['market_status'] == 'COMPLETE_TRADE':
         trade_information['market_status'] = 'TRADING'
 
@@ -38,7 +38,7 @@ def other_conditions(custom_conditional_data, trade_information, previous_trades
 
 
 def long_exit_conditions(custom_conditional_data, trade_information, indicators, prices, candles, symbol):
-    # Place Long exit (sell) conditions under this section.
+    # Uzun çıkış (satış) koşullarını bu bölüme yerleştirin.
     order_point = 0
     signal_id = 0
     macd = indicators['macd']
@@ -57,7 +57,7 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
     limit_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.01)), pRounding))
     limit_loss_status = basic_limit_setup(trade_information, limit_loss_price)
 
-    # Base return for waiting and updating order positions.
+    # Bekleyen ve güncellenen emir pozisyonları için baz dönüş.
     if stop_loss_status:
         return(stop_loss_status)
     if limit_loss_price == prices:
@@ -66,7 +66,7 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
         return({'order_point':'L_ext_{0}_{1}'.format(signal_id, order_point)})
     
 def long_entry_conditions(custom_conditional_data, trade_information, indicators, prices, candles, symbol):
-    # Place Long entry (buy) conditions under this section.
+    # Uzun giriş (satın alma) koşullarını bu bölüme yerleştirin.
     order_point = 0
     signal_id = 0
     macd = indicators['macd']
@@ -80,14 +80,14 @@ def long_entry_conditions(custom_conditional_data, trade_information, indicators
                     'description':'LONG entry signal 1', 
                     'order_type':'MARKET'})
 
-    # Base return for waiting and updating order positions.
+    # Bekleyen ve güncellenen emir pozisyonları için baz dönüş.
     if order_point == 0:
         return({'order_type':'WAIT'})
     else:
         return({'order_type':'WAIT', 'order_point':'L_ent_{0}_{1}'.format(signal_id, order_point)})
 
 def basic_stoploss_setup(trade_information, price, stop_price, position_type):
-    # Basic stop-loss setup.
+    # Temel stop-loss kurulumu.
     if trade_information['order_type'] == 'STOP_LOSS_LIMIT':
         return
 

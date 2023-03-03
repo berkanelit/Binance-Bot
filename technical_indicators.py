@@ -248,7 +248,7 @@ def get_MACD(prices, time_values=None, Efast=12, Eslow=26, signal=9, map_time=Fa
 def get_DEMA(prices, maPeriod, prec=8):
     EMA1 = get_EMA(prices, maPeriod)
     EMA2 = get_EMA(EMA1, maPeriod)
-    DEMA = np.subtract((2 * EMA1[:len(EMA2)]), EMA2)
+    DEMA = np.subtract((np.dot(2,EMA1[:len(EMA2)])), EMA2)
 
     return DEMA.round(prec)
 

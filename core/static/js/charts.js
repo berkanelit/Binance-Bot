@@ -22,6 +22,7 @@ var update_chart = true;
 // Chart template for main chart.
 var base_candle_chart_configuration = {
     series: [],
+    update_chart: true,
     chart: {
         height: 600,
         id: 'main_Chart',
