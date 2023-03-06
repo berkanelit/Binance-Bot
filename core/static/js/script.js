@@ -12,7 +12,8 @@ const class_data_mapping = {
     'trader-orderstatus':'order_status', 
     'trader-buyprice':'price', 
     'trader-sellprice':'price', 
-    'trader-orderpoint':'order_point'
+    'trader-orderpoint':'order_point',
+    'trader -limit':'limit_sell'
 };
 
 var current_chart = '';
@@ -149,7 +150,7 @@ function build_chart(market_pair, element){
 
 
 function rest_api(method, endpoint, data=null, target_function=null, target_element=null){
-    // if either the user has requested a force update on bot data or the user has added a new market to trade then send an update to the backend.
+   // eğer kullanıcı bot verilerinde zorla güncelleme talep ettiyse veya kullanıcı işlem yapmak için yeni bir pazar eklediyse, arka uca bir güncelleme gönderin.
     console.log(`'M: ${method}, ULR: /rest-api/v1/${endpoint}, D:${data}`);
     let request = new XMLHttpRequest();
     request.open(method, '/rest-api/v1/'+endpoint, true);

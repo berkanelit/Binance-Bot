@@ -19,6 +19,8 @@ from . import trader
 MULTI_DEPTH_INDICATORS = ['ema', 'sma', 'rma', 'order']
 
 # Globalleri başlat.
+test = api_master_rest_caller.Binance_REST.test_ping
+print(test)
 
 ## Şişe uygulamasını/soketini kurun
 APP         = Flask(__name__)
@@ -223,7 +225,7 @@ class BotCore():
 
     def __init__(self, settings, logs_dir, cache_dir):
         # Bot çekirdek yönetim nesnesi için başlatma.
-        logging.info('[BotCore] Initilizing the BotCore object.')
+        logging.info('[BotCore] BotCore nesnesi başlatılıyor.')
 
         ## Binance REST ve soket API'sini ayarlayın.
         self.rest_api           = api_master_rest_caller.Binance_REST(settings['public_key'], settings['private_key'])
@@ -259,7 +261,7 @@ class BotCore():
 
     def start(self):
         # Çekirdek nesneyi başlatın.
-        logging.info('[BotCore] Starting the BotCore object.')
+        logging.info('[BotCore] BotCore nesnesi başlatılıyor.')
         self.coreState = 'SETUP'
 
         ## pazarları kontrol edin
@@ -313,7 +315,7 @@ class BotCore():
             not_support_text = ''
             for market in not_supported:
                 not_support_text += ' '+str(market)
-            logging.warning('[BotCore] Following market pairs are not supported for {}: {}'.format(self.market_type, not_support_text))
+            logging.warning('[BotCore] Aşağıdaki pazar çiftleri için desteklenmez {}: {}'.format(self.market_type, not_support_text))
 
         valid_tading_markets = [market for market in found_markets if market not in not_supported]
 
@@ -338,6 +340,13 @@ class BotCore():
             user_info = self.rest_api.get_account(self.market_type)
             if self.market_type == 'SPOT':
                 wallet_balances = user_info['balances']
+                for balance in wallet_balances:
+                 total_balance = (float(balance['free']) + float(balance['locked']))
+                 if total_balance > 0:
+                    tokens = ({balance['asset']:[
+                                        float(balance['free']),
+                                        float(balance['locked'])]})
+                    print(tokens)
             elif self.market_type == 'MARGIN':
                 wallet_balances = user_info['userAssets']
             current_tokens = {}
@@ -358,7 +367,7 @@ class BotCore():
                 cached_traders_data = json.load(f)['data']
 
         ## Tüccar nesnelerini kurun ve başlatın.
-        logging.info('[BotCore] Starting the trader objects.')
+        logging.info('[BotCore] Tüccar nesneleri başlatılıyor.')
         for trader_ in self.trader_objects:
             currSymbol = "{0}{1}".format(trader_.base_asset, trader_.quote_asset)
 
@@ -383,24 +392,24 @@ class BotCore():
 
             trader_.start(self.base_currency, wallet_pair)
 
-        logging.debug('[BotCore] Starting trader manager')
+        logging.debug('[BotCore] Tüccar yöneticisini başlatılıyor')
         TM_thread = threading.Thread(target=self._trader_manager)
         TM_thread.start()
 
         if self.update_bnb_balance:
-            logging.debug('[BotCore] Starting BNB manager')
+            logging.debug('[BotCore] BNB yöneticisini başlatma')
             BNB_thread = threading.Thread(target=self._bnb_manager)
             BNB_thread.start()
 
-        logging.debug('[BotCore] Starting connection manager thread.')
+        logging.debug('[BotCore] Bağlantı yöneticisi iş parçacığı başlatılıyor.')
         CM_thread = threading.Thread(target=self._connection_manager)
         CM_thread.start()
 
-        logging.debug('[BotCore] Starting file manager thread.')
+        logging.debug('[BotCore] Dosya yöneticisi iş parçacığı başlatılıyor.')
         FM_thread = threading.Thread(target=self._file_manager)
         FM_thread.start()
 
-        logging.info('[BotCore] BotCore successfully started.')
+        logging.info('[BotCore] BotCore başarıyla başlatıldı.')
         self.coreState = 'RUN'
 
 
@@ -411,7 +420,7 @@ class BotCore():
 
 
     def _bnb_manager(self):
-        ''' This will manage BNB balance and update if there is low BNB in account. '''
+        ''' Bu, BNB bakiyesini yönetecek ve hesapta düşük BNB varsa güncellenecektir. '''
         last_wallet_update_time = 0
 
         while self.coreState != 'STOP':
@@ -430,7 +439,7 @@ class BotCore():
 
 
     def _file_manager(self):
-        ''' This section is responsible for activly updating the traders cache files. '''
+        ''' Bu bölüm, tüccarların önbellek dosyalarının aktif olarak güncellenmesinden sorumludur. '''
         while self.coreState != 'STOP':
             time.sleep(15)
 
@@ -442,7 +451,7 @@ class BotCore():
 
 
     def _connection_manager(self):
-        ''' This section is responsible for re-testing connectiongs in the event of a disconnect. '''
+        ''' Bu bölüm, bağlantı kesilmesi durumunda bağlantıların yeniden test edilmesinden sorumludur. '''
         update_time = 0
         retryCounter = 1
         time.sleep(20)
@@ -460,23 +469,23 @@ class BotCore():
                     try:
                         print(self.rest_api.test_ping())
                     except Exception as e:
-                        logging.warning('[BotCore] Connection issue: {0}.'.format(e))
+                        logging.warning('[BotCore] Bağlantı sorunu: {0}.'.format(e))
                         continue
 
-                    logging.info('[BotCore] Connection issue resolved.')
+                    logging.info('[BotCore] Bağlantı sorunu çözüldü.')
                     if not(self.socket_api.socketRunning):
-                        logging.info('[BotCore] Attempting socket restart.')
+                        logging.info('[BotCore] Soket yeniden başlatılmaya çalışılıyor.')
                         self.socket_api.start()
 
 
     def get_trader_data(self):
-        ''' This can be called to return data for each of the active traders. '''
+        ''' Bu, aktif tüccarların her biri için veri döndürmek için çağrılabilir. '''
         rData = [ _trader.get_trader_data() for _trader in self.trader_objects ]
         return(rData)
 
 
     def get_trader_indicators(self, market):
-        ''' This can be called to return the indicators that are used by the traders (Will be used to display web UI activity.) '''
+        ''' Bu, tüccarlar tarafından kullanılan göstergeleri döndürmek için çağrılabilir (Web kullanıcı arayüzü etkinliğini görüntülemek için kullanılacaktır.) '''
         for _trader in self.trader_objects:
             if _trader.print_pair == market:
                 indicator_data = _trader.indicators
@@ -487,7 +496,7 @@ class BotCore():
 
 
     def get_trader_candles(self, market):
-        ''' This can be called to return the candle data for the traders (Will be used to display web UI activity.) '''
+        ''' Bu, tüccarlar için mum verilerini döndürmek için çağrılabilir (Web kullanıcı arayüzü etkinliğini görüntülemek için kullanılacaktır.) '''
         for _trader in self.trader_objects:
             if _trader.print_pair == market:
                 sock_symbol = str(_trader.base_asset)+str(_trader.quote_asset)
@@ -501,7 +510,7 @@ def start(settings, logs_dir, cache_dir):
         core_object = BotCore(settings, logs_dir, cache_dir)
         core_object.start()
 
-    logging.info('[BotCore] Starting traders in {0} mode, market type is {1}.'.format(settings['run_type'], settings['market_type']))
+    logging.info('[BotCore] Tüccarlara başlamak {0} mod, pazar türü {1}.'.format(settings['run_type'], settings['market_type']))
     log = logging.getLogger('werkzeug')
     log.setLevel(logging.ERROR)
 

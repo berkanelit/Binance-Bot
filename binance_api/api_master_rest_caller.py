@@ -383,7 +383,7 @@ class Binance_REST:
         return(self.make_api_call(wallet_api.get_universalTransferHistory, kwargs))
 
     ## ------------------ [USER_DATA_STREAM_EXCLUSIVE] ------------------ ##
-    def get_listenKey(self, api_type=None):
+    def get_listenKey(self, api_type=None, **kwargs):
         if api_type == 'SPOT':      return(self.make_api_call(userDataStream_api.get_listenKey_spot))
         elif api_type == 'MARGIN':  return(self.make_api_call(userDataStream_api.get_listenKey_margin))
         elif api_type == 'FUTURES': return(self.make_api_call(userDataStream_api.send_listenKey_keepAlive_margin, kwargs))
@@ -484,8 +484,8 @@ class Binance_REST:
             else:
                 urlQuery = '{0}{1}'.format(REST_BASE, path)
 
-        logging.debug('[REST_MASTER] QUERY URL {0}'.format(urlQuery))
-       	api_resp = self.session.request(method, urlQuery, headers=headers, data=body)
+        logging.debug('[REST_MASTER] QUERY URL {0}'.format(urlQuery)),
+        api_resp = self.session.request(method, urlQuery, headers=headers, data=body)
         data = api_resp.json()
         logging.debug('[REST_MASTER] QUERY DATA {0}'.format(data))
 

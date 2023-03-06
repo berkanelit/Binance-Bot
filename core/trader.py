@@ -63,13 +63,13 @@ class BaseTrader(object):
         self.quote_asset = quote_asset
         self.base_asset = base_asset
 
-        logging.info('[BaseTrader][{0}] Initilizing trader object and empty attributes.'.format(self.print_pair))
+        logging.info('[BaseTrader][{0}] Tüccar nesnesi ve boş nitelikler başlatılıyor.'.format(self.print_pair))
 
         ## Tüccar tarafından kullanılacak kalan API'yi ayarlar.
         self.rest_api = rest_api
 
         if socket_api == None and data_if == None:
-            logging.critical('[BaseTrader][{0}] Initilization failed, bot must have either socket_api OR data_if set.'.format(self.print_pair))
+            logging.critical('[BaseTrader][{0}] Başlatma başarısız oldu, botta socket_api VEYA data_if ayarlanmış olmalıdır.'.format(self.print_pair))
             return
 
         ## Soket/veri arayüzünü kurun.
@@ -99,12 +99,12 @@ class BaseTrader(object):
         self.state_data = {}
         self.rules = {}
 
-        logging.debug('[BaseTrader][{0}] Initilized trader object.'.format(self.print_pair))
+        logging.debug('[BaseTrader][{0}] Başlatılan tüccar nesnesi.'.format(self.print_pair))
 
 
     def setup_initial_values(self, trading_type, run_type, filters):
         # Tüccar değerlerini başlat.
-        logging.info('[BaseTrader][{0}] Initilizing trader object attributes with data.'.format(self.print_pair))
+        logging.info('[BaseTrader][{0}] Verilerle tüccar nesnesi öznitelikleri başlatılıyor.'.format(self.print_pair))
 
         ## Gerekli ayarları doldurun.
         self.configuration.update({
@@ -124,20 +124,20 @@ class BaseTrader(object):
         if trading_type == 'MARGIN':
             self.market_activity.update(copy.deepcopy(TYPE_MARKET_EXTRA))
 
-        logging.debug('[BaseTrader][{0}] Initilized trader attributes with data.'.format(self.print_pair))
+        logging.debug('[BaseTrader][{0}] Verilerle birlikte tüccar öznitelikleri başlatıldı.'.format(self.print_pair))
 
 
     def start(self, MAC, wallet_pair, open_orders=None):
         '''
-        Start the trader.
-        Requires: MAC (Max Allowed Currency, the max amount the trader is allowed to trade with in BTC).
-        -> Check for previous trade.
-            If a recent, not closed traded is seen, or leftover currency on the account over the min to place order then set trader to sell automatically.
+        Tüccarı başlatın.
+        Gerektirir: MAC (İzin Verilen Maks. Para Birimi, tüccarın BTC'de işlem yapmasına izin verilen maksimum miktar).
+        -> Önceki ticareti kontrol edin.
+            Yakın zamanda kapatılmamış bir işlem görülürse veya sipariş vermek için minimum sürenin üzerinde hesapta kalan para birimi görülürse, tüccarı otomatik olarak satmaya ayarlayın.
         
-        ->  Start the trader thread. 
-            Once all is good the trader will then start the thread to allow for the market to be monitored.
+        -> Tüccar dizisini başlatın.
+            Her şey yolunda olduğunda tüccar, piyasanın izlenmesine izin vermek için iş parçacığını başlatacaktır.
         '''
-        logging.info('[BaseTrader][{0}] Starting the trader object.'.format(self.print_pair))
+        logging.info('[BaseTrader][{0}] Tüccar nesnesi başlatılıyor.'.format(self.print_pair))
         sock_symbol = self.base_asset+self.quote_asset
 
         if self.socket_api != None:
@@ -156,11 +156,11 @@ class BaseTrader(object):
 
     def stop(self):
         ''' 
-        Stop the trader.
-        -> Trader cleanup.
-            To gracefully stop the trader and cleanly eliminate the thread as well as market orders.
+        Tüccarı durdur.
+        -> Tüccar temizleme.
+            Tüccarı zarafetle durdurmak ve iş parçacığını ve piyasa emirlerini temiz bir şekilde ortadan kaldırmak için.
         '''
-        logging.debug('[BaseTrader][{0}] Stopping trader.'.format(self.print_pair))
+        logging.debug('[BaseTrader][{0}] Tüccarın durduruldu.'.format(self.print_pair))
 
         self.state_data['runtime_state'] = 'STOP'
         return(True)
@@ -168,15 +168,15 @@ class BaseTrader(object):
 
     def _main(self):
         '''
-        Main body for the trader loop.
-        -> Wait for candle data to be fed to trader.
-            Infinite loop to check if candle has been populated with data,
-        -> Call the updater.
-            Updater is used to re-calculate the indicators as well as carry out timed checks.
-        -> Call Order Manager.
-            Order Manager is used to check on currently PLACED orders.
-        -> Call Trader Manager.
-            Trader Manager is used to check the current conditions of the indicators then set orders if any can be PLACED.
+        Tüccar döngüsü için ana gövde.
+        -> Mum verilerinin tüccara beslenmesini bekleyin.
+            Mumun verilerle doldurulup doldurulmadığını kontrol etmek için sonsuz döngü,
+        -> Güncelleyiciyi arayın.
+            Güncelleyici, göstergeleri yeniden hesaplamanın yanı sıra zamanlı kontroller yapmak için kullanılır.
+        -> Sipariş Yöneticisini arayın.
+            Sipariş Yöneticisi, şu anda YERLEŞTİRİLMİŞ siparişleri kontrol etmek için kullanılır.
+        -> Tüccar Yöneticisini arayın.
+            Tüccar Yöneticisi, göstergelerin mevcut durumlarını kontrol etmek ve ardından YERLEŞTİRİLEBİLECEK olan emirleri ayarlamak için kullanılır.
         '''
         sock_symbol = self.base_asset+self.quote_asset
         last_wallet_update_time = 0
@@ -194,7 +194,7 @@ class BaseTrader(object):
             self.indicators = TC.technical_indicators(candles)
             indicators = self.strip_timestamps(self.indicators)
 
-            logging.debug('[BaseTrader] Collected trader data. [{0}]'.format(self.print_pair))
+            logging.debug('[BaseTrader] Tüccar verileri toplandı. [{0}]'.format(self.print_pair))
 
             socket_buffer_symbol = None
             if self.configuration['run_type'] == 'REAL':
@@ -267,25 +267,19 @@ class BaseTrader(object):
 
     def _order_status_manager(self, market_type, cp, socket_buffer_symbol):
         '''
-        This is the manager for all and any active orders.
-        -> Check orders (Test/Real).
-            This checks both the buy and sell side for test orders and updates the trader accordingly.
-        -> Monitor trade outcomes.
-            Monitor and note down the outcome of trades for keeping track of progress.
+        Bu, tüm aktif siparişlerin yöneticisidir.
+        -> Kontrol emirleri (Test/Gerçek).
+            Bu, test emirleri için hem alım hem de satım tarafını kontrol eder ve tüccarı buna göre günceller.
+        -> Ticaret sonuçlarını izleyin.
+            İlerlemeyi takip etmek için işlemlerin sonucunu izleyin ve not edin.
         '''
         active_trade = False
         
         if self.configuration['run_type'] == 'REAL':
             # Soket üzerinden gönderilen sipariş raporlarını yönetin.
-            if 'executionReport' in socket_buffer_symbol:
-                order_seen = socket_buffer_symbol['executionReport']
-
-                # Sipariş çakışmasını önlemek için tüccarın sipariş kimlikleri aracılığıyla verdiği siparişleri yönetin.
-                if order_seen['i'] == cp['order_id']:
-                    active_trade = True
-
-                elif cp['order_status'] == 'PLACED':
-                    active_trade = True
+            if cp['order_status'] == 'PLACED':
+                active_trade = True              # Yapılan güncelleme makina özlü sistemle çalışır 
+                order_seen = None
 
         else:
             # Test siparişleri için temel güncelleme.
@@ -293,7 +287,7 @@ class BaseTrader(object):
                 active_trade = True
                 order_seen = None
 
-        trade_done = False
+        trade_done = True
         if active_trade:
             # Bir siparişin mevcut durumunu belirleyin.
             if self.state_data['runtime_state'] == 'CHECK_ORDERS':
