@@ -12,8 +12,7 @@ const class_data_mapping = {
     'trader-orderstatus':'order_status', 
     'trader-buyprice':'price', 
     'trader-sellprice':'price', 
-    'trader-orderpoint':'order_point',
-    'trader -limit':'limit_sell'
+    'trader-orderpoint':'order_point'
 };
 
 var current_chart = '';

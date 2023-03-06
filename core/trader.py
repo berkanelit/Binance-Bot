@@ -277,9 +277,10 @@ class BaseTrader(object):
         
         if self.configuration['run_type'] == 'REAL':
             # Soket üzerinden gönderilen sipariş raporlarını yönetin.
-            if cp['order_status'] == 'PLACED':
-                active_trade = True              # Yapılan güncelleme makina özlü sistemle çalışır 
-                order_seen = None
+            if 'executionReport' in socket_buffer_symbol:
+                order_seen = socket_buffer_symbol['executionReport']
+                if order_seen['i'] == cp['order_id']:
+                    active_trade = True         # Yapılan güncelleme makina özlü sistemle çalışır 
 
         else:
             # Test siparişleri için temel güncelleme.
@@ -287,7 +288,7 @@ class BaseTrader(object):
                 active_trade = True
                 order_seen = None
 
-        trade_done = True
+        trade_done = False
         if active_trade:
             # Bir siparişin mevcut durumunu belirleyin.
             if self.state_data['runtime_state'] == 'CHECK_ORDERS':

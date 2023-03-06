@@ -74,9 +74,7 @@ def long_entry_conditions(custom_conditional_data, trade_information, indicators
     ema23 = indicators['ema']['ema23']
 
 
-    if (candles[0][4] > ema23[0]):
-     print("Ema Alım Sinyalinde...")
-     if macd[0]['signal'] < macd[0]['macd']:
+    if macd[0]['signal'] < macd[0]['macd']:
         print("Zero Macd Alım Sinyalinde")
         if macd[0]['hist'] > macd[1]['hist']:
             order_point += 1
