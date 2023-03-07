@@ -660,7 +660,7 @@ class BaseTrader(object):
 
 
     def update_wallets(self, socket_buffer_global):
-        ''' Update the wallet data with that collected via the socket '''
+        ''' M-cüzdan verilerini soket aracılığıyla toplanan verilerle güncelleyin '''
         last_wallet_update_time = socket_buffer_global['outboundAccountPosition']['E']
         foundBase = False
         foundQuote = False
@@ -682,5 +682,5 @@ class BaseTrader(object):
         if not(foundQuote):
             wallet_pair.update({self.quote_asset:[0.0, 0.0]})
 
-        logging.info('[BaseTrader] New account data pulled, wallets updated. [{0}]'.format(self.print_pair))
+        logging.info('[BaseTrader] Yeni hesap verileri çekildi, cüzdanlar güncellendi. [{0}]'.format(self.print_pair))
         return(wallet_pair, last_wallet_update_time)

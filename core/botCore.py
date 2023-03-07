@@ -19,8 +19,6 @@ from . import trader
 MULTI_DEPTH_INDICATORS = ['ema', 'sma', 'rma', 'order']
 
 # Globalleri başlat.
-test = api_master_rest_caller.Binance_REST.test_ping
-print(test)
 
 ## Şişe uygulamasını/soketini kurun
 APP         = Flask(__name__)

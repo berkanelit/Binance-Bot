@@ -51,18 +51,26 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
             return({'side':'SELL',
                 'description':'LONG exit signal 1', 
                 'order_type':'MARKET'})
+            
 
     stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.004)), pRounding))
+    limit_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.01)), pRounding))
     stop_loss_status = basic_stoploss_setup(trade_information, stop_loss_price, stop_loss_price, 'LONG')
     
-    limit_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.01)), pRounding))
-    limit_loss_status = basic_limit_setup(trade_information, limit_loss_price, limit_loss_price, 'LONG')
+    if limit_loss_price == prices['lastPrice']:
+        return({'side':'SELL',
+                'description':'Limit exit signal 1', 
+                'order_type':'MARKET'})
+    
+    
+    # Lımıt emri verilerek kar satış pozisyonu yaratmak için kullanılır.
+    
+    # limit_price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.01)), pRounding))
+    # limit_status = basic_limit_setup(trade_information, limit_price, 'LONG')
 
     # Bekleyen ve güncellenen emir pozisyonları için baz dönüş.
     if stop_loss_status:
         return(stop_loss_status)
-    if limit_loss_status:
-        return(limit_loss_status)
     else:
         return({'order_point':'L_ext_{0}_{1}'.format(signal_id, order_point)})
     
@@ -99,18 +107,6 @@ def basic_stoploss_setup(trade_information, price, stop_price, position_type):
         'description':'{0} exit stop-loss'.format(position_type), 
         'order_type':'STOP_LOSS_LIMIT'})
     
-def basic_limit_setup(trade_information, price, stop_price, position_type):
-    # Temel stop-loss kurulumu.
-    if trade_information['order_type'] == 'STOP_LOSS_LIMIT':
-        return
-
-    return({'side':'SELL', 
-        'price':price,
-        'stopPrice':stop_price,
-        'description':'{0} exit stop-loss'.format(position_type), 
-        'order_type':'STOP_LOSS_LIMIT'})
-
-
 def short_exit_conditions(custom_conditional_data, trade_information, indicators, prices, candles, symbol):
     pass
 
