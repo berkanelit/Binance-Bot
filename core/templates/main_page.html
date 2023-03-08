@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Trader Control Panel</title>
+        <title class="info-inf">Trader Control Panel</title>
         <meta charst="en">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -10,7 +10,6 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 
-        <!-- This is used to load the modules that I made and will be using. -->
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <script type="text/javascript">
             var ip = '{{ data.host.IP }}';
@@ -25,7 +24,7 @@
         <div class="sidebar">
             <h2>Binance Trader</h2>
             <ul>
-                <li><a href=# onclick="hide_section(event, 'Overview');">Overview</a></li>
+                <li><a href=# onclick="hide_section(event, 'Overview');">Gözlem</a></li>
             {% for market_symbol in data.market_symbols %}
                 <li><a href=# onclick="hide_section(event, '{{ market_symbol }}');">{{ market_symbol }}</a></li>
             {% endfor %}

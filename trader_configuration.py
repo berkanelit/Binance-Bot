@@ -15,10 +15,10 @@ def technical_indicators(candles):
     close_prices    = [candle[4] for candle in candles]
 
     
-    indicators.update({'macd':TI.get_zeroLagMACD(close_prices, time_values=time_values, map_time=True)})
+    indicators.update({'macd':TI.get_zeroLagMACD(open_prices, time_values=time_values, map_time=True)})
     
     indicators.update({'ema':{}})
-    indicators['ema'].update({'ema23':TI.get_EMA(close_prices, 23, time_values=time_values, map_time=True)})
+    indicators['ema'].update({'ema23':TI.get_EMA(open_prices, 23, time_values=time_values, map_time=True)})
     
 
     return(indicators)
@@ -44,7 +44,6 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
     macd = indicators['macd']
 
     if macd[0]['signal'] > macd[0]['macd']:
-        print("Macd Satım Sinyalinde...")
         if macd[0]['hist'] < macd[1]['hist']:
             print("Satıyor...")
             order_point += 1
@@ -54,10 +53,11 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
             
 
     stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.004)), pRounding))
-    limit_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.01)), pRounding))
+    limit_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.001)), pRounding))
     stop_loss_status = basic_stoploss_setup(trade_information, stop_loss_price, stop_loss_price, 'LONG')
     
-    if limit_loss_price == prices['lastPrice']:
+    
+    if limit_loss_price < float(trade_information['price']):
         return({'side':'SELL',
                 'description':'Limit exit signal 1', 
                 'order_type':'MARKET'})
@@ -80,11 +80,11 @@ def long_entry_conditions(custom_conditional_data, trade_information, indicators
     signal_id = 0
     macd = indicators['macd']
     ema23 = indicators['ema']['ema23']
-
-
-    if macd[0]['signal'] < macd[0]['macd']:
-        print("Zero Macd Alım Sinyalinde")
+    
+    if candles[0][4] > ema23[0]:
+     if macd[0]['signal'] < macd[0]['macd']:
         if macd[0]['hist'] > macd[1]['hist']:
+            print("Alıyor")
             order_point += 1
             return({'side':'BUY',
                     'description':'LONG entry signal 1', 

@@ -1,13 +1,23 @@
 {% macro overview_data_panel(market_symbols) %}
     <section id="trader_Overview" class="Overview-panel">
-        <h3>Trader Overview</h3>
-        <p>
-            Total PL: <span class="overview-totalpl"></span> | Total Trades: <span class="overview-totaltrades"></span>
+        <h2>Trader Gözlem</h2>
+        <br></br>
+        <p class="info-inf">
+            Toplam Kar: <span class="overview-totalpl"></span> | Toplam Ticaret: <span class="overview-totaltrades"></span>
         </p>
+        
+        <br></br>
         {% for market_symbol in market_symbols %}
-        <div id="overview_{{ market_symbol }}">
-            Symbol: {{ market_symbol }} | State: <span class="trader-state"></span> | Side: <span class="trader-orderside"></span> | Trades: <span class="trader-trades"></span> | Overall: <span class="trader-overall"></span></span> | Last Price: <span class="trader-lastprice"></span> | OP: <span class="trader-orderpoint"></span><br />
+        <div id="overview_{{ market_symbol }}" class="info-inf">
+            Sembol: {{ market_symbol }} | Durumu: <span class="trader-state"></span> | Yön: <span class="trader-orderside"></span> | Trades: <span class="trader-trades"></span> | Overall: <span class="trader-overall"></span></span> | Son Fiyat: <span class="trader-lastprice"></span> | OP: <span class="trader-orderpoint"></span>
+            <a href=# class="small-button green-button" onclick="start_trader(event, '{{ market_symbol }}');">Start</a>
+            <a href=# class="small-button amber-button" onclick="pause_trader(event, '{{ market_symbol }}');">Pause</a>
         </div>
+        {% endfor %}
+    </section>
+    <section id ="trader-consol" class="consol-panel">
+        {% for info in logging %}
+         
         {% endfor %}
     </section>
 {% endmacro %}
@@ -18,9 +28,10 @@
         <h3>{{ market_symbol }}</h3>
         <a href=# class="small-button green-button" onclick="start_trader(event, '{{ market_symbol }}');">Start</a>
         <a href=# class="small-button amber-button" onclick="pause_trader(event, '{{ market_symbol }}');">Pause</a>
-        <p>
-            State: <span class="trader-state"></span> | Trades: <span class="trader-trades"></span> | Overall: <span class="trader-overall"></span> | Last Update: <span class="trader-lastupdate"></span> | Last Price: <span class="trader-lastprice"></span><br />
-            <span class="trader-markettype"></span> <span class="trader-orderside"></span> | Type: <span class="trader-ordertype"></span> | Status: <span class="trader-orderstatus"></span> | Buy Price: <span class="trader-buyprice"></span><span class="show-sellaction">| Sell Price: <span class="trader-sellprice"></span></span> | OP: <span class="trader-orderpoint"></span>
+        <br></br>
+        <p class="info-inf">
+            Durumu: <span class="trader-state"></span> | Trades: <span class="trader-trades"></span> | Overall: <span class="trader-overall"></span> | Son Güncelleme: <span class="trader-lastupdate"></span> | Son Fiyat: <span class="trader-lastprice"></span><br />
+            <span class="trader-markettype"></span> <span class="trader-orderside"></span> | Type: <span class="trader-ordertype"></span> | Durum: <span class="trader-orderstatus"></span> | Satın Alma: <span class="trader-buyprice"></span><span class="show-sellaction">| Satış Fiyat: <span class="trader-sellprice"></span></span> | OP: <span class="trader-orderpoint"></span>
         </p>
         <div class="trader_charts">
         </div>

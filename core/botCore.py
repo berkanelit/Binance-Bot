@@ -16,10 +16,9 @@ from binance_api import api_master_socket_caller
 
 from . import trader
 
-MULTI_DEPTH_INDICATORS = ['ema', 'sma', 'rma', 'order']
+MULTI_DEPTH_INDICATORS = ['ema', 'sma', 'rma', 'order', 'z_lag_macd']
 
 # Globalleri başlat.
-
 ## Şişe uygulamasını/soketini kurun
 APP         = Flask(__name__)
 SOCKET_IO   = SocketIO(APP)
@@ -205,9 +204,9 @@ def web_updater():
                 total_bulk_data = []
                 for trader in traderData:
                     bulk_data = {}
+                    bulk_data.update({'wallet_pair':trader['wallet_pair']})
                     bulk_data.update({'market':trader['market']})
                     bulk_data.update({'trade_recorder':trader['trade_recorder']})
-                    bulk_data.update({'wallet_pair':trader['wallet_pair']})
 
                     bulk_data.update(trader['custom_conditions'])
                     bulk_data.update(trader['market_activity'])
@@ -216,14 +215,14 @@ def web_updater():
                     total_bulk_data.append(bulk_data)
 
                 SOCKET_IO.emit('current_traders_data', {'data':total_bulk_data})
-                time.sleep(.8)
+                time.sleep(.3)
 
 
 class BotCore():
 
     def __init__(self, settings, logs_dir, cache_dir):
         # Bot çekirdek yönetim nesnesi için başlatma.
-        logging.info('[BotCore] BotCore nesnesi başlatılıyor.')
+        logging.info('[BotCore] Çekirdek Yönetim Sistemleri Başlatılıyor.')
 
         ## Binance REST ve soket API'sini ayarlayın.
         self.rest_api           = api_master_rest_caller.Binance_REST(settings['public_key'], settings['private_key'])
@@ -259,7 +258,7 @@ class BotCore():
 
     def start(self):
         # Çekirdek nesneyi başlatın.
-        logging.info('[BotCore] BotCore nesnesi başlatılıyor.')
+        logging.info('[BotCore] BotCore Ticareti başlatılıyor.')
         self.coreState = 'SETUP'
 
         ## pazarları kontrol edin
@@ -520,4 +519,3 @@ def start(settings, logs_dir, cache_dir):
         port=settings['host_port'], 
         debug=True, 
         use_reloader=False)
-    
