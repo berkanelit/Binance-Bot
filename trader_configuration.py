@@ -42,6 +42,9 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
     order_point = 0
     signal_id = 0
     macd = indicators['macd']
+    
+    for i in prices:
+        print(i)
 
     if macd[0]['signal'] > macd[0]['macd']:
         if macd[0]['hist'] < macd[1]['hist']:
@@ -53,20 +56,16 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
             
 
     stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.004)), pRounding))
-    limit_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.001)), pRounding))
+    limit_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.01)), pRounding))
     stop_loss_status = basic_stoploss_setup(trade_information, stop_loss_price, stop_loss_price, 'LONG')
     
+    # Lımıt emri verilerek kar satış pozisyonu yaratmak için kullanılır.
     
-    if limit_loss_price < float(trade_information['price']):
+    if limit_loss_price < float(prices['lastPrice']):
         return({'side':'SELL',
                 'description':'Limit exit signal 1', 
                 'order_type':'MARKET'})
     
-    
-    # Lımıt emri verilerek kar satış pozisyonu yaratmak için kullanılır.
-    
-    # limit_price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.01)), pRounding))
-    # limit_status = basic_limit_setup(trade_information, limit_price, 'LONG')
 
     # Bekleyen ve güncellenen emir pozisyonları için baz dönüş.
     if stop_loss_status:
