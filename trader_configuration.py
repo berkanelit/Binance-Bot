@@ -59,12 +59,6 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
     
     # Lımıt emri verilerek kar satış pozisyonu yaratmak için kullanılır.
     
-    if limit_loss_price < float(prices['lastPrice']):
-        order_point += 1
-        return({'side':'SELL',
-                'description':'Limit exit signal 1', 
-                'order_type':'MARKET'})
-    
 
     # Bekleyen ve güncellenen emir pozisyonları için baz dönüş.
     if stop_loss_status:
