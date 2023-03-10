@@ -43,8 +43,6 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
     signal_id = 0
     macd = indicators['macd']
     
-    for i in prices:
-        print(i)
 
     if macd[0]['signal'] > macd[0]['macd']:
         if macd[0]['hist'] < macd[1]['hist']:
@@ -62,6 +60,7 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
     # Lımıt emri verilerek kar satış pozisyonu yaratmak için kullanılır.
     
     if limit_loss_price < float(prices['lastPrice']):
+        order_point += 1
         return({'side':'SELL',
                 'description':'Limit exit signal 1', 
                 'order_type':'MARKET'})

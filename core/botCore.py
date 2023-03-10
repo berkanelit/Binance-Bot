@@ -67,7 +67,8 @@ def control_panel():
     ## Soket ip/portunu ayarla.
     start_up_data = {
         'host':{'IP': host_ip, 'Port': host_port},
-        'market_symbols': core_object.trading_markets
+        'market_symbols': core_object.trading_markets,
+        'logger': core_object.logger
     }
 
     return(render_template('main_page.html', data=start_up_data))
@@ -204,9 +205,9 @@ def web_updater():
                 total_bulk_data = []
                 for trader in traderData:
                     bulk_data = {}
-                    bulk_data.update({'wallet_pair':trader['wallet_pair']})
                     bulk_data.update({'market':trader['market']})
                     bulk_data.update({'trade_recorder':trader['trade_recorder']})
+                    bulk_data.update({'wallet_pair':trader['wallet_pair']})
 
                     bulk_data.update(trader['custom_conditions'])
                     bulk_data.update(trader['market_activity'])
@@ -251,6 +252,10 @@ class BotCore():
         ## Temel tüccar ayarlarını başlat.
         self.trader_objects     = []
         self.trading_markets    = settings['trading_markets']
+        
+        # Logger Panel desteği sağlar js üzerinden yapılandırılır.
+
+        self.logger = logging.basicConfig(level =logging.info)
 
         ## Çekirdek durumu başlat
         self.coreState          = 'READY'

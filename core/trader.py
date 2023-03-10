@@ -232,7 +232,7 @@ class BaseTrader(object):
                     ## Aktif siparişleri yönetmek için.
                     if socket_buffer_symbol != None or self.configuration['run_type'] == 'TEST':
                         cp = self._order_status_manager(market_type, cp, socket_buffer_symbol)
-
+                        
                     ## Özel koşullu eylemleri kontrol etmek için
                     self.custom_conditional_data, cp = TC.other_conditions(
                         self.custom_conditional_data, 
@@ -298,6 +298,7 @@ class BaseTrader(object):
 
         ## Ticaret sonuçlarını izleyin.
         if trade_done:
+            print("Ticaret Güncelleniyor")
             if self.configuration['run_type'] == 'REAL':
                 print('order seen: ')
                 print(order_seen)
