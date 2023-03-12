@@ -16,7 +16,7 @@ from binance_api import api_master_socket_caller
 
 from . import trader
 
-MULTI_DEPTH_INDICATORS = ['ema', 'sma', 'rma', 'order', 'z_lag_macd']
+MULTI_DEPTH_INDICATORS = ['ema', 'sma', 'rma', 'order']
 
 # Globalleri başlat.
 ## Şişe uygulamasını/soketini kurun
@@ -67,8 +67,7 @@ def control_panel():
     ## Soket ip/portunu ayarla.
     start_up_data = {
         'host':{'IP': host_ip, 'Port': host_port},
-        'market_symbols': core_object.trading_markets,
-        'logger': core_object.logger
+        'market_symbols': core_object.trading_markets
     }
 
     return(render_template('main_page.html', data=start_up_data))
@@ -216,7 +215,7 @@ def web_updater():
                     total_bulk_data.append(bulk_data)
 
                 SOCKET_IO.emit('current_traders_data', {'data':total_bulk_data})
-                time.sleep(.3)
+                time.sleep(.8)
 
 
 class BotCore():
@@ -469,12 +468,12 @@ class BotCore():
                     retryCounter += 1
                     
                     try:
-                        print(self.rest_api.test_ping())
+                        pass
                     except Exception as e:
                         logging.warning('[BotCore] Bağlantı sorunu: {0}.'.format(e))
                         continue
 
-                    logging.info('[BotCore] Bağlantı sorunu çözüldü.')
+                    
                     if not(self.socket_api.socketRunning):
                         logging.info('[BotCore] Soket yeniden başlatılmaya çalışılıyor.')
                         self.socket_api.start()

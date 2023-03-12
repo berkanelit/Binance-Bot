@@ -54,18 +54,15 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
             
 
     stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.004)), pRounding))
-    limit_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.01)), pRounding))
     stop_loss_status = basic_stoploss_setup(trade_information, stop_loss_price, stop_loss_price, 'LONG')
-    
-    # Lımıt emri verilerek kar satış pozisyonu yaratmak için kullanılır.
-    
+    limit_loss = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.01)), pRounding))
 
     # Bekleyen ve güncellenen emir pozisyonları için baz dönüş.
     if stop_loss_status:
         return(stop_loss_status)
     else:
         return({'order_point':'L_ext_{0}_{1}'.format(signal_id, order_point)})
-    
+
 def long_entry_conditions(custom_conditional_data, trade_information, indicators, prices, candles, symbol):
     # Uzun giriş (satın alma) koşullarını bu bölüme yerleştirin.
     order_point = 0

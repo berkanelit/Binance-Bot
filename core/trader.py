@@ -298,11 +298,7 @@ class BaseTrader(object):
 
         ## Ticaret sonuçlarını izleyin.
         if trade_done:
-            print("Ticaret Güncelleniyor")
-            if self.configuration['run_type'] == 'REAL':
-                print('order seen: ')
-                print(order_seen)
-
+            
             # Sipariş kaydediciyi güncelleyin.
             self.trade_recorder.append([time.time(), cp['price'], token_quantity, cp['order_description'], cp['order_side']])
             logging.info('[BaseTrader] Completed {0} order. [{1}]'.format(cp['order_side'], self.print_pair))
@@ -485,7 +481,6 @@ class BaseTrader(object):
         # Yeni bir piyasa emri verin.
         if order:
             order_results = self._place_order(market_type, cp, order)
-            logging.info('order: {0}\norder result:\n{1}'.format(order, order_results))
 
             # Sipariş yerleşiminden binance ile ilgili hatalar için hata tutamacı:
             if 'code' in order_results['data']:
@@ -629,7 +624,7 @@ class BaseTrader(object):
 
 
     def get_trader_data(self):
-        ''' Access that is availble for the traders details. '''
+        ''' Tüccar detayları için mevcut olan erişim. '''
         trader_data = {
             'market':self.print_pair,
             'configuration':self.configuration,
