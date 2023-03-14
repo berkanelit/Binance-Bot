@@ -323,7 +323,7 @@ class BotCore():
         ## setup the binance socket.
         for market in valid_tading_markets:
             self.socket_api.set_candle_stream(symbol=market, interval=self.candle_Interval)
-            self.socket_api.set_manual_depth_stream(symbol=market, update_speed='50ms')
+            self.socket_api.set_manual_depth_stream(symbol=market, update_speed='1000ms')
 
         if self.run_type == 'REAL':
             self.socket_api.set_userDataStream(self.rest_api, self.market_type)
