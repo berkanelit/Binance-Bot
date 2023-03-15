@@ -45,7 +45,7 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
     macd = indicators['macd']
     
 
-    if macd[0]['signal'] < macd[0]['macd']:
+    if macd[1]['signal'] < macd[1]['macd']:
      if macd[0]['signal'] > macd[0]['macd']:
         order_point += 1
         if macd[0]['hist'] < macd[1]['hist']:
