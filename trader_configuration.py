@@ -16,10 +16,10 @@ def technical_indicators(candles):
     close_prices    = [candle[4] for candle in candles]
 
     
-    indicators.update({'macd':TI.get_zeroLagMACD(close_prices, time_values=time_values, map_time=True)})
+    indicators.update({'macd':TI.get_zeroLagMACD(open_prices, time_values=time_values, map_time=True)})
     
     indicators.update({'ema':{}})
-    indicators['ema'].update({'ema25':TI.get_EMA(close_prices, 25, time_values=time_values, map_time=True)})
+    indicators['ema'].update({'ema25':TI.get_EMA(open_prices, 25, time_values=time_values, map_time=True)})
     
 
     return(indicators)
@@ -45,19 +45,27 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
     macd = indicators['macd']
     
 
-    if macd[0]['signal'] == macd[0]['macd']:
+    if macd[0]['signal'] < macd[0]['macd']:
+     if macd[0]['signal'] > macd[0]['macd']:
+        order_point += 1
         if macd[0]['hist'] < macd[1]['hist']:
             print("Satıyor...========================================================================================")
-            order_point += 1
             return({'side':'SELL',
                 'description':'LONG exit signal 1', 
                 'order_type':'MARKET'})
-            
+    price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.01)), pRounding))
+    
+    if float(prices['lastPrice']) > price:
+        return({'side':'SELL', 
+        'price':price,
+        'description':'exit stop-loss', 
+        'order_type':'LIMIT'})
 
     stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.01)), pRounding))
     stop_loss_price2 = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.012)), pRounding))
     stop_loss_status = basic_stoploss_setup(trade_information, stop_loss_price2, stop_loss_price)
-
+    
+    
     # Bekleyen ve güncellenen emir pozisyonları için baz dönüş.
     if stop_loss_status:
         return(stop_loss_status)
@@ -72,11 +80,11 @@ def long_entry_conditions(custom_conditional_data, trade_information, indicators
     ema25 = indicators['ema']['ema25']
     
     
-    if candles[0][4] > ema25[0]:
-     if macd[0]['signal'] == macd[0]['macd']:
+    if macd[1]['signal'] > macd[1]['macd']:
+     if macd[0]['signal'] < macd[0]['macd']:
+        order_point += 1
         if macd[0]['hist'] > macd[1]['hist']:
             print("Alıyor==========================================================================================")
-            order_point += 1
             return({'side':'BUY',
                     'description':'LONG entry signal 1', 
                     'order_type':'MARKET'})
