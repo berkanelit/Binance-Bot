@@ -16,10 +16,10 @@ def technical_indicators(candles):
     close_prices    = [candle[4] for candle in candles]
 
     
-    indicators.update({'macd':TI.get_zeroLagMACD(open_prices, time_values=time_values, map_time=True)})
+    indicators.update({'macd':TI.get_zeroLagMACD(close_prices, time_values=time_values, map_time=True)})
     
     indicators.update({'ema':{}})
-    indicators['ema'].update({'ema9':TI.get_EMA(open_prices, 9, time_values=time_values, map_time=True)})
+    indicators['ema'].update({'ema25':TI.get_EMA(close_prices, 25, time_values=time_values, map_time=True)})
     
 
     return(indicators)
@@ -45,7 +45,7 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
     macd = indicators['macd']
     
 
-    if macd[0]['signal'] > macd[0]['macd']:
+    if macd[0]['signal'] == macd[0]['macd']:
         if macd[0]['hist'] < macd[1]['hist']:
             print("Satıyor...========================================================================================")
             order_point += 1
@@ -54,8 +54,8 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
                 'order_type':'MARKET'})
             
 
-    stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.004)), pRounding))
-    stop_loss_price2 = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.005)), pRounding))
+    stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.01)), pRounding))
+    stop_loss_price2 = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.012)), pRounding))
     stop_loss_status = basic_stoploss_setup(trade_information, stop_loss_price2, stop_loss_price)
 
     # Bekleyen ve güncellenen emir pozisyonları için baz dönüş.
@@ -69,10 +69,11 @@ def long_entry_conditions(custom_conditional_data, trade_information, indicators
     order_point = 0
     signal_id = 0
     macd = indicators['macd']
-    ema9 = indicators['ema']['ema9']
+    ema25 = indicators['ema']['ema25']
     
     
-    if macd[0]['signal'] < macd[0]['macd']:
+    if candles[0][4] > ema25[0]:
+     if macd[0]['signal'] == macd[0]['macd']:
         if macd[0]['hist'] > macd[1]['hist']:
             print("Alıyor==========================================================================================")
             order_point += 1
