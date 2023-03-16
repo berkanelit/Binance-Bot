@@ -53,7 +53,7 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
             return({'side':'SELL',
                 'description':'LONG exit signal 1', 
                 'order_type':'MARKET'})
-    price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.01)), pRounding))
+    price = float('{0:.{1}f}'.format((trade_information['buy_price']+(trade_information['buy_price']*0.03)), pRounding))
     
     if float(prices['lastPrice']) > price:
         return({'side':'SELL', 
@@ -61,8 +61,8 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
         'description':'exit stop-loss', 
         'order_type':'LIMIT'})
 
-    stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.01)), pRounding))
-    stop_loss_price2 = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.012)), pRounding))
+    stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.015)), pRounding))
+    stop_loss_price2 = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.017)), pRounding))
     stop_loss_status = basic_stoploss_setup(trade_information, stop_loss_price2, stop_loss_price)
     
     

@@ -255,7 +255,7 @@ def get_DEMA(prices, maPeriod, prec=8):
 
 
 ## This function is used to calculate and return the the MACD indicator.
-def get_zeroLagMACD(prices, time_values=None, Efast=5, Eslow=35, signal=5, map_time=False):
+def get_zeroLagMACD(prices, time_values=None, Efast=12, Eslow=26, signal=9, map_time=False):
     """
     This function uses 5 parameters to calculate the Moving Average Convergence/Divergence-
 
