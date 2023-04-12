@@ -1,22 +1,22 @@
-// Gösterge meta ayrıntıları
+// Indicator metadata details
 const indicator_chart_types_mapping = {'patterns_data_lines':'line', 'patterns_data_points':'scatter', 'tops_bottoms':'scatter', 'data_lines':'line', 'cps':'line', 'ichi':'line', 'boll':'line', 'adx':'line', 'stock':'line', 'order':'scatter', 'ema':'line', 'sma':'line', 'rma':'line', 'rsi':'line', 'mfi':'line', 'cci':'line', 'zerolagmacd':'macd', 'macd':'macd'}
 const indicator_home_type_mapping = {'patterns_data_lines':'MAIN', 'patterns_data_points':'MAIN', 'tops_bottoms':'MAIN', 'data_lines':'MAIN', 'ichi':'MAIN', 'cps':'MAIN', 'boll':'MAIN', 'adx':'OWN', 'stock':'OWN', 'order':'MAIN', 'ema':'MAIN', 'sma':'MAIN', 'rma':'MAIN', 'rsi':'OWN', 'mfi':'OWN', 'cci':'OWN', 'zerolagmacd':'OWN', 'macd':'OWN'}
 const indicator_is_single_mapping = ['patterns_data_lines', 'patterns_data_points', 'tops_bottoms', 'data_lines', 'order', 'ema', 'sma', 'rma', 'rsi', 'mfi', 'cci', 'cps']
 const double_depth_indicators = ['ema', 'sma', 'order', 'patterns_data_points', 'patterns_data_lines'];
 
-// Temel Apex grafik yapılandırması.
+// Basic Apex chart configuration.
 window.Apex = {
     chart: {
         animations: {
             enabled: true
         },
-        update_chart: true
+                update_chart: true
     },
     autoScaleYaxis: true,
     update_chart: true
 };
 
-// Ana grafik için grafik şablonu.
+// Chart template for the main chart.
 var base_candle_chart_configuration = {
     series: [],
     update_chart: true,
@@ -31,7 +31,6 @@ var base_candle_chart_configuration = {
     markers: {
         size: []
     },
-    //renkler: [],
     stroke: {
         width: []
     },
@@ -52,9 +51,8 @@ var base_candle_chart_configuration = {
 
 let loaded_candles_chart = null;
 
-
 function initial_build(target_element, charting_data) {
-    // Ana kanal grafiği konumunu ekleyin.
+    // Add main candle chart location.
     var candle_data = charting_data['candles'];
     var indicator_data = charting_data['indicators'];
     var main_chart_series = [];
@@ -66,7 +64,7 @@ function initial_build(target_element, charting_data) {
     var built_data = build_candle_data(candle_data);
     var built_candle_data = built_data[0];
 
-    // Son olarak mumu görüntülenen grafiğe ekleyin.
+    // Finally, add the candle to the displayed chart.
     loaded_candles_chart["series"].push({
         name: 'candle',
         type: 'candlestick',
@@ -85,7 +83,6 @@ function initial_build(target_element, charting_data) {
     candle_chart = new ApexCharts(target_element, loaded_candles_chart);
     candle_chart.render();
 }
-
 
 function build_candle_data(candle_data) {
     var built_candle_data = [];
@@ -111,12 +108,11 @@ function build_candle_data(candle_data) {
     return([built_candle_data, built_volume_data]);
 }
 
-
 function build_timeseries(ind_obj) {
     var indicator_lines = [];
     var keys = []
 
-    // Çıktı almak için sıralanmış zaman damgasını kullanın.
+    // Use ordered timestamp to get the output.
     for (var ind in ind_obj) {
         var current_set = ind_obj[ind]
 
@@ -140,7 +136,6 @@ function build_timeseries(ind_obj) {
     }
     return(indicator_lines);
 }
-
 
 function build_basic_indicator(chart_obj, ind_obj, chart_type, line_name=null, ind_name=null) {
     var indicator_lines = build_timeseries(ind_obj);
@@ -191,11 +186,9 @@ function build_basic_indicator(chart_obj, ind_obj, chart_type, line_name=null, i
     }
 }
 
-
 function populate_chart(indicator_data) {
 
     for (var raw_indicator in indicator_data) {
-
         var patt = /[^\d]+/i;
         var indicator = raw_indicator.match(patt)[0];
 

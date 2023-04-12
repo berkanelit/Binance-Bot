@@ -578,7 +578,7 @@ class BaseTrader(object):
 
             if order['order_type'] == 'OCO_LIMIT':
                 logging.info('[BaseTrader] symbol:{0}, side:{1}, type:{2}, quantity:{3} price:{4}, stopPrice:{5}, stopLimitPrice:{6}'.format(self.print_pair, order['side'], order['order_type'], f_quantity,order['price'], order['stopPrice'], order['stopLimitPrice']))
-                rData.update(self.rest_api.place_order(self.configuration['trading_type'], symbol=self.configuration['symbol'], side=side, type=order['order_type'], timeInForce='GTC', quantity=f_quantity, price=order['price'], stopPrice=order['stopPrice'], stopLimitPrice=order['stopLimitPrice']))
+                rData.update(self.rest_api.place_order(self.configuration['trading_type'], symbol=self.configuration['symbol'], side=order['side'], type=order['order_type'], timeInForce='GTC', quantity=f_quantity, price=order['price'], stopPrice=order['stopPrice'], stopLimitPrice=order['stopLimitPrice']))
                 return({'action':'PLACED_MARKET_ORDER', 'data':rData})
 
             elif order['order_type'] == 'MARKET':

@@ -14,18 +14,7 @@
         </div>
         {% endfor %}
     </section>
-    <br></br>
 {% endmacro %}
-{% macro logger_panel(logger) %}
-  <br></br>
-  <section id ="trader-consol" class="consol-panel">
-    <h1 class="info-inf"> Conole Panel <h1>
-      {% for log in logger %}
-      <p class="info-inf"> {{log}} </p>
-      {% endfor %}
-  </section>
-{% endmacro %}
-
 {% macro market_data_panel(market_symbol) %}
     <section id="trader_{{ market_symbol }}" class="trader-panel">
         <h3>{{ market_symbol }}</h3>
