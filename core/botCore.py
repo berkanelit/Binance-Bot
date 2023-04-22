@@ -293,7 +293,7 @@ class BotCore():
             tS = abs(int(len(tickSizeBase.digits)+tickSizeBase.exponent))+1
 
             # Bu, piyasaların minimum gösterimini elde etmek için kullanılır.
-            mN = float(market['filters'][2]['minNotional'])
+            mN = float(market['filters'][6]['minNotional'])
 
             # Tüm kuralları tüccara iletmek için bir json nesnesine koyun.
             market_rules = {'LOT_SIZE':lS, 'TICK_SIZE':tS, 'MINIMUM_NOTATION':mN}

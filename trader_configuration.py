@@ -1,6 +1,3 @@
-import logging
-import numpy as np
-import time
 import technical_indicators as TI
 
 ## Minimum fiyat yuvarlama.
@@ -21,7 +18,7 @@ def technical_indicators(candles):
     indicators.update({'hist':TI.get_zeroLagMACD(close_prices, time_values=time_values, map_time=True)})
     
     indicators.update({'ema':{}})
-    indicators['ema'].update({'ema25':TI.get_EMA(open_prices, 25, time_values=time_values, map_time=True)})
+    indicators['ema'].update({'ema200':TI.get_EMA(close_prices, 100, time_values=time_values, map_time=True)})
     
 
     return(indicators)
@@ -61,11 +58,6 @@ def long_exit_conditions(custom_conditional_data, trade_information, indicators,
         return({'side':'SELL',
         'description':'Karlı Satış işlemi Gerçekleşti.', 
         'order_type':'MARKET'})
-        
-    if macd[0]['hist'] < macd[1]['hist']:
-        return({'side':'SELL',
-        'description':'Temnkinlli Satış işlemi Gerçekleşti.', 
-        'order_type':'MARKET'})
 
     stop_loss_price = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.02)), pRounding))
     stop_loss_price2 = float('{0:.{1}f}'.format((trade_information['buy_price']-(trade_information['buy_price']*0.021)), pRounding))
@@ -83,11 +75,12 @@ def long_entry_conditions(custom_conditional_data, trade_information, indicators
     order_point = 0
     signal_id = 0
     macd = indicators['macd']
-    ema25 = indicators['ema']['ema25']
     macd2 = indicators['hist']
+    ema200 = indicators['ema']['ema200']
     
-    if macd[1]['signal'] > macd[1]['macd']:
-     if macd[0]['signal'] < macd[0]['macd']:
+    if candles[0][4] > ema200[0]:
+     if macd[1]['signal'] > macd[1]['macd']:
+      if macd[0]['signal'] < macd[0]['macd']:
         order_point += 1
         if macd2[0]['hist'] > macd2[1]['hist']:
          if macd[0]['hist'] > macd[1]['hist']:
